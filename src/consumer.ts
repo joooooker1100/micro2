@@ -5,16 +5,16 @@ import { environment } from './enviroments/enviroment';
 
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+  const rabbitApp = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
     transport: Transport.RMQ,
     options: {
       urls: [environment.rabbitMqUrl],
-      queue: 'product_queue',
+      queue: 'micro_queue',
       queueOptions: {
         durable: false
       },
     },
   });
-  await app.listen();
+  await rabbitApp.listen();
 }
 bootstrap();

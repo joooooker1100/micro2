@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../enviroments/enviroment';
 
 @Injectable()
 export class RabitService {
@@ -11,7 +11,7 @@ export class RabitService {
         transport: Transport.RMQ,
         options: {
           urls: [environment.rabbitMqUrl],
-          queue: 'product_queue',
+          queue: 'micro_queue',
           queueOptions: {
             durable: false
           },
@@ -19,7 +19,7 @@ export class RabitService {
       });
   }
 
- public async sendMessage(message:any) {
-    await this.client.emit("product-queue",message);
+ public async sendMessage(eventName: string, message:any ) {
+    await this.client.emit({event:eventName}, message);
   }
 }

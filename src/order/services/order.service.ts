@@ -6,16 +6,18 @@ import { Model } from "mongoose";
 import { OrderInterface } from "../interfaces/order.interface";
 
 @Injectable()
-export class OrderService{
-   constructor(
-    @InjectModel(orderSchemaName)
-    private readonly orderModel:Model<OrderModel>
-   ){}
-    public async order(order:OrderInterface):Promise<OrderModel>{
+export class OrderService {
+    constructor(
+        @InjectModel(orderSchemaName)
+        private readonly orderModel: Model<OrderModel>
+    ) { }
+    public async order(order: OrderInterface): Promise<OrderModel> {
         return this.orderModel.create(order);
     }
-    public async getOrder(customer:string):Promise<OrderModel[]>{
-        return this.orderModel.find({customer})
+    public async getOrder(customer: string) {
+        return this.orderModel.findOne({ customer })
+
+
 
     }
 
