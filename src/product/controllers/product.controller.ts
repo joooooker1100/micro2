@@ -8,7 +8,6 @@ import { HttpService } from '@nestjs/axios'
 @Controller('shop')
 export class ProductController {
     constructor(private readonly ProductService: ProductService,
-        private readonly rabbitService:RabitService,
         private readonly httpService: HttpService
     ) {
 
@@ -25,38 +24,37 @@ export class ProductController {
         await this.ProductService.deleteProduct(product.sku)
 
     }
- //   @MessagePattern({event:'product-status'})
- //   public async send(@Payload() product){
-  //      await this.ProductService.showMessage(product)
-
-  //  }
-   @MessagePattern({ event: 'product-status' })
+    @MessagePattern({ event: 'product-status' })
     public async getState(@Payload() product: ProductInterface) {
-       console.log("d", product)
-       const getProduct = await this.ProductService.setStatus(product)
-        console.log(getProduct)}
- //   @Get('')
- //   public async getProducts() {
-  //      return this.ProductService.getProducts()
-  //  }
-  //  @Get(':id')
-   // public async getProduct(@Param('id') sku: string) {
-   //    await this.rabbitService.sendMessage('product-get',{sku})
-    //   const pro = await this.ProductService.getProduct(sku)
-   //    console.log(pro)
-     //   return pro
-   // }
-   
+        console.log("d", product)
+        const updatedProduct = await this.ProductService.setStatus(product);
+        return updatedProduct;
+    }
 
-  @Get('checkAvailability/:sku')
-  public async checkAvailability(@Param('sku') sku: string) {
-    const response =  this.httpService.get(`http://localhost:3000/api/warehouse/${sku}`)
-    
-    console.log('Response from warehouse:', response);
-    return response
-    
- 
-}
-}
+
+    @Get('checkAvailability/:sku')
+    public async checkAvailability(@Param('sku') sku: string) {
+      //  try{
+       //     const response = await this.httpService.get(`http://localhost:3000/api/warehouse/${sku}`).toPromise();
+       //     console.log('Response from warehouse:', response.data);
+       //     const warehouseProduct = response.data;
+        //    await this.ProductService.setStatus({
+        //      sku: warehouseProduct.sku,
+        //      status: warehouseProduct.qt,
+        //      category: 'category', 
+        //      title: 'title' 
+        //    });
+            const product =await this.ProductService.checkAvailability(sku)
+            console.log('Product from database:', product);
+            return product 
+      //  }catch(error){
+     //       {
+       //         console.error('Error in checkAvailability:', error.message);
+      //          throw new Error('Internal server error')
+      //  }
+
+
+ //   }
+}}
 
 

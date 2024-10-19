@@ -12,7 +12,6 @@ export class ProductService {
     constructor(
         @InjectModel(productSchemaName)
         private readonly productModel: Model<ProductModel>,
-        private readonly httpService: HttpService
     ) {
     }
     public async deleteProduct(sku: string): Promise<void> {
@@ -22,32 +21,14 @@ export class ProductService {
         await this.productModel.updateOne({ sku: product.sku }, { $set: product }, { upsert: true })
     }
     public async setStatus(product: ProductInterface): Promise<void> {
-        await this.productModel.updateOne({ sku: product.sku }, { status: product.status }, { upsert: true })
+
+        await this.productModel.updateOne({ sku: product.sku }, { $set: { status: product.status } }, { upsert: true })
     }
     public async getProducts() {
         return this.productModel.find();
     }
-    public async getProduct(sku: string) {
-        const product = await this.productModel.findOne({ sku })
-        console.log(product)
-        return product
+    public async checkAvailability(sku: string): Promise<ProductModel> {
+        return this.productModel.findOne({ sku })
 
     }
-    public async showMessage(product){
-        if(product.qt>0){
-            console.log("mojod")
-        }else{
-            console.log("na mojod")
-        }
-    }
-    public async checkAvailability(sku: string) {
-      //  const response = this.httpService.get(`http://localhost:3000/api/warehouse/${sku}`);
-      const response =this.productModel.findOne({sku})
-        console.log(response)
-        return response;
-      }
-      public async getState(sku: string): Promise<ProductInterface> {
-        return this.productModel.findOne({ sku });
-
-}
 }
