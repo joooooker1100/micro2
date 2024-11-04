@@ -14,6 +14,7 @@ import { HttpModule } from "@nestjs/axios";
             schema: productSchema,
             name: productSchemaName
         }])],
+        exports:[ProductService],
     providers: [ProductService],
     controllers: [ProductController]
 })

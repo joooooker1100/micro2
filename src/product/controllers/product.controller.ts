@@ -8,7 +8,7 @@ import { HttpService } from '@nestjs/axios'
 @Controller('shop')
 export class ProductController {
     constructor(private readonly ProductService: ProductService,
-        private readonly httpService: HttpService
+      //  private readonly httpService: HttpService
     ) {
 
     }
@@ -55,6 +55,7 @@ export class ProductController {
 
 
  //   }
-}}
+}
+}
 
 
